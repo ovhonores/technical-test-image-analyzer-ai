@@ -3,17 +3,15 @@ import app from '../src/app';
 import path from 'path';
 
 // Mock the imageAnalysisService to avoid real API calls during tests
-jest.mock('../src/services/image-analysis.service', () => {
-  return {
-    imageAnalysisService: {
-      analyzeImage: jest.fn().mockResolvedValue({
-        tags: [
-          { label: 'Example', confidence: 0.99 },
-        ],
-      }),
-    },
-  };
-});
+jest.mock('../src/services/analyze.service', () => ({
+  analyzeService: {
+    analyzeImage: jest.fn().mockResolvedValue({
+      tags: [
+        { label: 'mock-tag', confidence: 0.99 }
+      ],
+    }),
+  },
+}));
 describe('POST /api/analyze', () => {
   it('should return 400 if no image file is provided', async () => {
     const response = await request(app)
