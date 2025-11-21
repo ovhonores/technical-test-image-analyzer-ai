@@ -177,6 +177,78 @@ Frontend:
 BACKEND_URL=http://localhost:3051
 ```
 
+
+## Ejecución con Docker
+
+Este proyecto incluye configuración de Docker Compose para facilitar el despliegue.
+
+### Requisitos
+
+- Docker 20.x o superior
+- Docker Compose v2.x o superior
+
+### Levantar los servicios
+
+Para iniciar todos los servicios (backend y frontend):
+```bash
+docker compose up
+```
+
+Para ejecutar en segundo plano (detached mode):
+```bash
+docker compose up -d
+```
+
+Los servicios estarán disponibles en:
+- Frontend: http://localhost:3001
+- Backend: http://localhost:3050
+
+### Detener los servicios
+
+Para detener y eliminar los contenedores, redes y volúmenes:
+```bash
+docker compose down -v
+```
+
+Para solo detener sin eliminar volúmenes:
+```bash
+docker compose down
+```
+
+### Reconstruir los servicios
+
+Si realizaste cambios en el código o en los Dockerfiles y necesitas reconstruir las imágenes:
+```bash
+docker compose up --build
+```
+
+Para forzar una recreación completa desde cero:
+```bash
+docker compose up --build --force-recreate
+```
+
+### Ver logs
+
+Para ver los logs de todos los servicios:
+```bash
+docker compose logs -f
+```
+
+Para ver logs de un servicio específico:
+```bash
+docker compose logs -f backend
+docker compose logs -f frontend
+```
+
+### Variables de entorno con Docker
+
+Al usar Docker Compose, las variables de entorno se configuran en el archivo `docker-compose.yml`. Es necesatio el archivo `.env` en la raíz del proyecto con:
+```env
+OPENAI_API_KEY=tu_api_key_aqui
+```
+
+El archivo `docker-compose.yml` se encargará de pasar estas variables a los contenedores correspondientes.
+
 ## Autor
 
 Terry Honores
