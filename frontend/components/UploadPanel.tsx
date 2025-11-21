@@ -2,8 +2,16 @@
 
 import { useRef } from "react";
 
-export default function UploadPanel({setImage }: {
-  setImage: (file: File) => void;
+export default function UploadPanel({
+  loading,
+  setImage, 
+  setCleanTags, 
+  setError,
+  }: {
+  loading: boolean; 
+  setImage: (file: File | null) => void;
+  setCleanTags: (clean: boolean) => void;
+  setError: (error: string | null) => void;
 } ) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -11,9 +19,19 @@ export default function UploadPanel({setImage }: {
     inputRef.current?.click();
   };
 
+  const cleanImage = () => {
+    setImage(null);
+    setCleanTags(true);
+    setError(null);
+  }
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setImage(file);
+    if (file) {
+      setCleanTags(true);
+      setImage(file);
+      setError(null);
+    }
 
     
   };
@@ -21,8 +39,9 @@ export default function UploadPanel({setImage }: {
   return (
     <div className="flex flex-wrap items-center gap-4">
       <button
-        className="rounded-full bg-white px-8 py-3 font-medium text-gray-900 hover:bg-gray-100"
+        className="rounded-full bg-white px-8 py-3 font-medium text-gray-900 hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
         onClick={handleUploadClick}
+        disabled={loading}
       >
         Upload
       </button>
@@ -34,6 +53,13 @@ export default function UploadPanel({setImage }: {
         className="hidden"
         onChange={handleFileChange}
       />
+      <button
+        className="rounded-full bg-black px-8 py-3 font-medium text-white hover:bg-white-100 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
+        onClick={cleanImage}
+        disabled={loading}
+      >
+        Limpiar
+      </button>
     </div>
   );
 }
