@@ -2,10 +2,22 @@ import request from 'supertest';
 import app from '../src/app';
 import path from 'path';
 
+// Mock the imageAnalysisService to avoid real API calls during tests
+jest.mock('../src/services/image-analysis.service', () => {
+  return {
+    imageAnalysisService: {
+      analyzeImage: jest.fn().mockResolvedValue({
+        tags: [
+          { label: 'Example', confidence: 0.99 },
+        ],
+      }),
+    },
+  };
+});
 describe('POST /api/analyze', () => {
   it('should return 400 if no image file is provided', async () => {
     const response = await request(app)
-      .post('/api/analyze') // o /api/analyze/analyze según cómo tengas la ruta
+      .post('/api/analyze') 
       .send();
 
     expect(response.status).toBe(400);
@@ -16,7 +28,7 @@ describe('POST /api/analyze', () => {
 
     const response = await request(app)
       .post('/api/analyze')
-      .attach('image', imagePath); // 'image' debe coincidir con upload.single('image')
+      .attach('file', imagePath); // 'file' debe coincidir con upload.single('file')
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('tags');
