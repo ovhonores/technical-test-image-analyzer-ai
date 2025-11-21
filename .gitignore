@@ -66,5 +66,4 @@ frontend/next-env.d.ts
 frontend/.next/
 frontend/out/
 frontend/build/
-frontend/dist/
 frontend/.env*.local
